@@ -1,6 +1,7 @@
 
 CREATE or alter PROCEDURE bronze.load_bronze as 
 BEGIN
+    DECLARE @start_time DATETIME, @end_time DATETIME
     BEGIN TRY
         PRINT '===========================================================';
         PRINT 'Loading Bronze Layer';
@@ -12,6 +13,7 @@ BEGIN
         PRINT 'Loading bronze.crm_cust_info'
         PRINT '-------------------------'
 
+        SET @start_time = GETDATE()
         TRUNCATE TABLE bronze.crm_cust_info
         BULK INSERT bronze.crm_cust_info
         FROM 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_crm\cust_info.csv'
@@ -20,10 +22,15 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        SET @end_time = GETDATE()
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
+
         PRINT '-------------------------'
         PRINT 'Loading bronze.crm_prd_info'
         PRINT '-------------------------'
-
+        SET @start_time = GETDATE()
         TRUNCATE TABLE bronze.crm_prd_info
         BULK INSERT bronze.crm_prd_info
         FROM 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_crm\prd_info.csv'
@@ -32,10 +39,14 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
+
         PRINT '-------------------------'
         PRINT 'Loading bronze.crm_sales_details'
         PRINT '-------------------------'
-
+        SET @start_time = GETDATE()
         TRUNCATE TABLE bronze.crm_sales_details
         BULK INSERT bronze.crm_sales_details
         from 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_crm\sales_details.csv'
@@ -44,6 +55,10 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
+
         PRINT '==========================================='
         PRINT 'Loading CRM Tables'
         PRINT '==========================================='
@@ -51,6 +66,8 @@ BEGIN
         PRINT '-------------------------'
         PRINT 'Loading bronze.erp_cust_az_12'
         PRINT '-------------------------'
+        SET @start_time = GETDATE()
+
         TRUNCATE TABLE bronze.erp_cust_az_12
         BULK INSERT bronze.erp_cust_az_12
         FROM 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_erp\CUST_AZ12.csv'
@@ -59,9 +76,14 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
+
         PRINT '-------------------------'
         PRINT 'Loading bronze.erp_loc_a101'
         PRINT '-------------------------'
+        SET @start_time = GETDATE()
         TRUNCATE TABLE bronze.erp_loc_a101
         BULK INSERT bronze.erp_loc_a101
         from 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_erp\LOC_A101.csv'
@@ -70,9 +92,13 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
         PRINT '-------------------------'
         PRINT 'Loading bronze.erp_px_cat_g1v2'
         PRINT '-------------------------'
+        SET @start_time = GETDATE()
         TRUNCATE TABLE bronze.erp_px_cat_g1v2
         BULK INSERT bronze.erp_px_cat_g1v2
         from 'D:\Projects for CV\SQL-DataWarehouse-Project\datasets\source_erp\PX_CAT_G1V2.csv'
@@ -81,6 +107,9 @@ BEGIN
             fieldterminator = ',',
             tablock
         );
+        PRINT '-----------'
+        PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
+        PRINT '-----------'
     END TRY
     BEGIN CATCH
             PRINT '=========================================================='
@@ -91,3 +120,4 @@ BEGIN
     END CATCH
 END
 
+EXEC bronze.load_bronze
