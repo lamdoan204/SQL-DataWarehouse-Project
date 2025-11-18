@@ -1,11 +1,20 @@
 
+/*
+    - Stored procedured: Load Bronze Layer (Source - Bronze Layer)
+    Script Purpose:
+    This stored procedure loads data into the bronze schema form external scv files.
+    It performs the following actions:
+    -   Truncates the bronze tables before loading data.
+    -   Using the 'Bulk insert' command to load data from csv files to bronze tables.
+*/
 CREATE or alter PROCEDURE bronze.load_bronze as 
 BEGIN
-    DECLARE @start_time DATETIME, @end_time DATETIME
+    DECLARE @start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME
     BEGIN TRY
         PRINT '===========================================================';
         PRINT 'Loading Bronze Layer';
         PRINT '===========================================================';
+        SET @batch_start_time = GETDATE()
         PRINT '---------------------------------------'
         PRINT 'Loading CRM Tables';
         PRINT '---------------------------------------'
@@ -110,6 +119,10 @@ BEGIN
         PRINT '-----------'
         PRINT 'Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) as NVARCHAR) + ' seconds'
         PRINT '-----------'
+        SET @batch_end_time = GETDATE()
+        PRINT '===================================================================='
+        PRINT 'Loading Bronze Layer is completed !!!!!'
+        PRINT 'Batch Load Duration: '+ CAST(DATEDIFF(SECOND, @batch_start_time, @batch_end_time) as NVARCHAR) + ' seconds'
     END TRY
     BEGIN CATCH
             PRINT '=========================================================='
@@ -120,4 +133,4 @@ BEGIN
     END CATCH
 END
 
-EXEC bronze.load_bronze
+-- EXEC bronze.load_bronze
