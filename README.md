@@ -13,3 +13,7 @@ Develop a modern data warehouse using SQL Server to consolidate sales data, enab
 - **Scope**: Focus on the latest dataset only; historization of data is not required.
 - **Documentation**: Provide clear documentation of the data model to support both business stakeholders and analytics teams.
 ---
+
+issue while transform and clean and load to silver layer each table
+- crm_cust_info: duplicate id, unspected space, standardization of  gender and cst_marital_status columns.\
+- crm_prd_infor: extract cat_id, prd_key from prd_ley raw column, start_date > end_date.
