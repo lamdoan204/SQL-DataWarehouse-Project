@@ -9,7 +9,7 @@ CREATE TABLE bronze.crm_cust_info(
     cst_first_name NVARCHAR(50),
     cst_last_name NVARCHAR(50),
     cst_marital_status NVARCHAR(50),
-    cst_gndr CHAR,
+    cst_gndr NVARCHAR(50),
     cst_create_date DATE
 );
 GO
@@ -20,7 +20,7 @@ CREATE TABLE bronze.crm_prd_info(
     prd_key NVARCHAR(50),
     prd_nm NVARCHAR(50),
     prd_cost INT,
-    prd_line CHAR,
+    prd_line NVARCHAR(50),
     prd_start_dt DATE,
     prd_end_dt DATE
 );
@@ -31,7 +31,7 @@ CREATE TABLE bronze.crm_sales_details(
     sls_ord_num NVARCHAR(50),
     sls_prd_key NVARCHAR(50),
     sls_cust_id INT,
-    sls_order_dt DATE,
+    sls_order_dt NVARCHAR(50),
     sls_ship_dt DATE,
     sls_due_dt DATE,
     sls_sales FLOAT,
