@@ -141,3 +141,14 @@ case when UPPER(TRIM(cntry)) = 'DE' then 'Germany'
 end as cntry
 from bronze.erp_loc_a101
 
+-----------------------------------------------------------------------------
+insert into silver.erp_px_cat_g1v2(id, cat, subcat, maintenance)
+select 
+    case when id = 'CO_PD' then 'CO_PE'
+        else id
+    end as id,
+    cat,
+    subcat,
+    maintenance 
+from 
+bronze.erp_px_cat_g1v2
