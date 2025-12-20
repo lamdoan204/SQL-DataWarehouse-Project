@@ -15,5 +15,6 @@ Develop a modern data warehouse using SQL Server to consolidate sales data, enab
 ---
 
 issue while transform and clean and load to silver layer each table
-- crm_cust_info: duplicate id, unspected space, standardization of  gender and cst_marital_status columns.\
+- crm_cust_info: duplicate id, unspected space, standardization of  gender and cst_marital_status columns.
 - crm_prd_infor: extract cat_id, prd_key from prd_ley raw column, start_date > end_date.
+- crm_salse_details: tranform sls_prd_key, check and fix unvalid sls_order_dt cast to date same for date columns, check have any order_date > ship_date or due_date, Check Bussiness Rules sale = price * quantity 

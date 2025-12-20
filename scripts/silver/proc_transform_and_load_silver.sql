@@ -51,8 +51,7 @@ REPLACE(SUBSTRING(prd_key, 1, 5), '-', '_') as cat_id,
 REPLACE(SUBSTRING(prd_key, 7, len(prd_key)), '-', '_') as prd_key,
 prd_nm,
 Case
-    when prd_cost < 0 then 0
-    when prd_cost is null then 0
+    when prd_cost < 0 or prd_cost is null then 0
     else prd_cost
 end as prd_cost,
 case UPPER(TRIM(prd_line))
@@ -64,5 +63,48 @@ case UPPER(TRIM(prd_line))
 end as prd_line,
 CAST(prd_start_dt as DATE) as prd_start_dt,
 CAST(LEAD(prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt) - 1 as DATE) as prd_end_dt
-
 from bronze.crm_prd_info 
+
+
+
+insert into silver.crm_sales_details(
+    sls_ord_num,
+    sls_prd_key,
+    sls_cust_id,
+    sls_order_dt,
+    sls_ship_dt,
+    sls_due_dt,
+    sls_quantity,
+    sls_price,
+    sls_sales
+)   
+SELECT
+    sls_ord_num,
+    REPLACE(sls_prd_key, '-', '_') as sls_prd_key,
+    sls_cust_id,
+
+    case 
+        when sls_order_dt <= 0 or LEN(sls_order_dt) != 8 then null
+        else cast( CAST(sls_order_dt as nvarchar) as date)
+    end as sls_order_dt,
+
+    case 
+        when sls_ship_dt <= 0 or LEN(sls_ship_dt) != 8 then null
+        else cast( CAST(sls_ship_dt as nvarchar) as date)
+    end as sls_ship_dt,
+
+    case 
+        when sls_due_dt <= 0 or LEN(sls_due_dt) != 8 then null
+        else cast( CAST(sls_due_dt as nvarchar) as date)
+    end as sls_due_dt,
+    sls_quantity,
+    case 
+        when sls_price is null or sls_price <=0 then sls_sales / sls_quantity
+        else sls_price
+    end as sls_price,
+    case
+        when sls_sales <= 0 or sls_sales is null or sls_sales != sls_quantity * abs(sls_price) then sls_price * sls_quantity
+        else sls_sales
+    end as sls_sales
+
+from bronze.crm_sales_details
