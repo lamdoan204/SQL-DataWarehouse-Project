@@ -108,3 +108,23 @@ SELECT
     end as sls_sales
 
 from bronze.crm_sales_details
+
+insert into silver.erp_cust_az_12(
+    cid,
+    bdate,
+    gen
+)
+SELECT
+case when cid like 'NAS%' then SUBSTRING(cid, 4, LEN(cid))
+    else cid
+end as cid,
+
+case when bdate > GETDATE() then null
+    else bdate
+end as bdate, 
+
+case when UPPER(TRIM(gen)) in ('FEMALE', 'F') THEN 'Female'
+    when UPPER(TRIM(gen)) in ('M', 'MALE') then 'Male'
+    else 'n/a'
+end as gen
+FROM bronze.erp_cust_az_12
