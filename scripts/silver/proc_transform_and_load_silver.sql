@@ -34,7 +34,7 @@ SELECT
 
     where flag_last = 1
 
-
+-------------------------------------------------------------------
 
 INSERT INTO silver.crm_prd_info (
     prd_id, 
@@ -66,7 +66,7 @@ CAST(LEAD(prd_start_dt) OVER (PARTITION BY prd_key ORDER BY prd_start_dt) - 1 as
 from bronze.crm_prd_info 
 
 
-
+------------------------------------------------------------------------
 insert into silver.crm_sales_details(
     sls_ord_num,
     sls_prd_key,
@@ -108,7 +108,7 @@ SELECT
     end as sls_sales
 
 from bronze.crm_sales_details
-
+---------------------------------------------------------------------------
 insert into silver.erp_cust_az_12(
     cid,
     bdate,
@@ -128,3 +128,16 @@ case when UPPER(TRIM(gen)) in ('FEMALE', 'F') THEN 'Female'
     else 'n/a'
 end as gen
 FROM bronze.erp_cust_az_12
+-----------------------------------------------------------------------------
+
+insert into silver.erp_loc_a101(cid, cntry)
+
+SELECT
+REPLACE(cid, '-', '') as cid,
+case when UPPER(TRIM(cntry)) = 'DE' then 'Germany'
+    when UPPER(TRIM(cntry)) in ('US', 'USA', 'UNITED STATES') THEN 'United States'
+    when TRIM(cntry) = '' or cntry is null then 'n/a'
+    else cntry
+end as cntry
+from bronze.erp_loc_a101
+

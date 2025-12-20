@@ -1,4 +1,1 @@
-SELECT
-*
-from silver.erp_cust_az_12 
-where bdate > GETDATE()
+select * from silver.erp_loc_a101

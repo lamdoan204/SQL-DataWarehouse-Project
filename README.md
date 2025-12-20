@@ -19,4 +19,5 @@ issue while transform and clean and load to silver layer each table
 - crm_prd_infor: extract cat_id, prd_key from prd_ley raw column, start_date > end_date.
 - crm_salse_details: tranform sls_prd_key, check and fix unvalid sls_order_dt cast to date same for date columns, check have any order_date > ship_date or due_date, Check Bussiness Rules sale = price * quantity 
 - erp_cust_az12: extract cust_key from cid column, check valid bdate (bdate < '1920-01-01' or bdate > GETDATE()), check valid gender column (distinct gen)
-- 
+- erp_loc_a101: extract cust_key from cid column, check valid and consistence of cntry column (distinct cntry)
+- erp_px_cat_g1v2:
