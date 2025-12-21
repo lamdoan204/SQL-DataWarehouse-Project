@@ -65,7 +65,7 @@ CREATE or ALTER PROCEDURE silver.load_silver as
         PRINT '================================================================'
         -------------------------------------------------------------------
         PRINT '================================================================'
-        SET @start_time =GETDATE()
+        SET @start_time = GETDATE()
         PRINT 'STARTING LOAD TABLE: silver.crm_prd_info'
         PRINT '================================================================'
 

@@ -21,3 +21,7 @@ issue while transform and clean and load to silver layer each table
 - erp_cust_az12: extract cust_key from cid column, check valid bdate (bdate < '1920-01-01' or bdate > GETDATE()), check valid gender column (distinct gen)
 - erp_loc_a101: extract cust_key from cid column, check valid and consistence of cntry column (distinct cntry)
 - erp_px_cat_g1v2:
+
+issues while integrate data from silver layer to create data model in gold layer
+- table customer_info and cust_az12 have same column displaying the customer's gender: cst_gdr and gen(have different information in 1 row, so choose the primary source is crm_cust_info, and if cst_gdr is null then choose information of gen column) used fucntions: COALESCE()
+- rename & sort column friendly.
