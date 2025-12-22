@@ -1,6 +1,9 @@
 
 -- create view dimension customers
 GO
+IF OBJECT_ID('gold.dim_customers', 'V') IS NOT NULL
+    DROP VIEW gold.dim_customers;
+GO
 CREATE VIEW gold.dim_customers AS
 SELECT 
 ROW_NUMBER() over (ORDER BY ci.cst_id) as customer_key,
@@ -25,6 +28,10 @@ LEFT JOIN silver.erp_loc_a101 la
 
 
 -- create view dimension products
+
+GO
+IF OBJECT_ID('gold.dim_products', 'V') IS NOT NULL
+    DROP VIEW gold.dim_products;
 GO
 CREATE VIEW gold.dim_products  as
 SELECT
@@ -45,6 +52,9 @@ where pi.prd_end_dt is NULL -- get the newest product in history
 
 -- create view fact sales
 GO
+IF OBJECT_ID('gold.fact_sales', 'V') IS NOT NULL
+    DROP VIEW gold.fact_sales;
+GO
 CREATE VIEW gold.fact_sales AS
 SELECT
 sd.sls_ord_num as order_number,
@@ -55,7 +65,10 @@ sd.sls_ship_dt as shipping_date,
 sd.sls_due_dt as  due_date,
 sd.sls_sales as sales_amount,
 sd.sls_quantity as quantity,
-sd.sls_price as price
+sd.sls_price as price,
+ABS((dp.cost - sd.sls_price)*sd.sls_quantity )as profit
+
 From silver.crm_sales_details sd
     LEFT JOIN gold.dim_customers dc on sd.sls_cust_id = dc.customer_id
     LEFT JOIN gold.dim_products dp on sd.sls_prd_key = dp.product_number
+
